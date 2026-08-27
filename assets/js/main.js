@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(Object.fromEntries(data.entries()))
                 }).catch(() => {});
             }
-            window.open(`https://wa.me/5511999999999?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+            window.open(`https://wa.me/5511941438001?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
         });
     }
 });
