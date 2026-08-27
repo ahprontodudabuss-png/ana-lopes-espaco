@@ -204,3 +204,183 @@ button.nav-cta {
         justify-content: center;
     }
 }
+
+/* Correção do bloco de detalhes: cartões empilhados sem sobreposição */
+.intro-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    padding-top: 34px;
+}
+
+.detail-card {
+    width: min(225px, 100%);
+}
+
+.detail-card-offset {
+    position: relative;
+    top: auto;
+    right: auto;
+    align-self: flex-end;
+    margin-top: 0;
+}
+
+@media (max-width: 1100px) and (min-width: 901px) {
+    .intro-grid {
+        grid-template-columns: 82px minmax(0, 1fr) minmax(235px, 280px);
+        gap: 36px;
+    }
+
+    .detail-card {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .intro-detail {
+        flex-direction: row;
+        gap: 18px;
+        padding-top: 20px;
+    }
+
+    .detail-card {
+        width: calc(50% - 9px);
+    }
+
+    .detail-card-offset {
+        position: static;
+        align-self: auto;
+    }
+}
+
+@media (max-width: 560px) {
+    .intro-detail {
+        flex-direction: column;
+        gap: 14px;
+        padding-top: 10px;
+    }
+
+    .detail-card {
+        width: 100%;
+        min-height: 160px;
+    }
+}
+
+/* Correção final de alta prioridade — impede regras externas de esticar componentes */
+.site-header .nav-cta,
+.site-header a.nav-cta,
+.site-header button.nav-cta {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: auto !important;
+    height: 46px !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    max-height: 46px !important;
+    margin: 0 !important;
+    padding: 0 18px !important;
+    flex: 0 0 auto !important;
+    line-height: 1 !important;
+}
+
+.forms-section .booking-form button.button-full,
+.forms-section .booking-form button[type="submit"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: flex-start !important;
+    width: 220px !important;
+    height: 52px !important;
+    min-width: 220px !important;
+    min-height: 52px !important;
+    max-width: 100% !important;
+    max-height: 52px !important;
+    margin: 12px 0 0 !important;
+    padding: 0 24px !important;
+    flex: 0 0 auto !important;
+    overflow: hidden !important;
+    line-height: 1 !important;
+}
+
+.intro-section .intro-detail {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 18px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 34px !important;
+}
+
+.intro-section .intro-detail .detail-card {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: min(225px, 100%) !important;
+    height: auto !important;
+    min-height: 198px !important;
+    margin: 0 !important;
+}
+
+.intro-section .intro-detail .detail-card-offset {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    align-self: flex-end !important;
+    margin: 0 !important;
+}
+
+@media (max-width: 900px) {
+    .forms-section .booking-form button.button-full,
+    .forms-section .booking-form button[type="submit"] {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 50px !important;
+        min-height: 50px !important;
+        max-height: 50px !important;
+    }
+
+    .intro-section .intro-detail {
+        flex-direction: row !important;
+        align-items: stretch !important;
+        gap: 18px !important;
+        padding-top: 20px !important;
+    }
+
+    .intro-section .intro-detail .detail-card {
+        width: calc(50% - 9px) !important;
+        min-height: 175px !important;
+    }
+
+    .intro-section .intro-detail .detail-card-offset {
+        align-self: auto !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .site-header .nav-cta,
+    .site-header a.nav-cta,
+    .site-header button.nav-cta {
+        width: 100% !important;
+        height: 46px !important;
+        min-height: 46px !important;
+        max-height: 46px !important;
+    }
+
+    .intro-section .intro-detail {
+        flex-direction: column !important;
+        gap: 14px !important;
+        padding-top: 10px !important;
+    }
+
+    .intro-section .intro-detail .detail-card,
+    .intro-section .intro-detail .detail-card-offset {
+        width: 100% !important;
+        min-height: 160px !important;
+        align-self: stretch !important;
+    }
+}
