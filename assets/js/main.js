@@ -60,22 +60,36 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             const data = new FormData(form);
-            const mode = data.get('form_type') === 'orcamento' ? 'orçamento' : 'agendamento';
-            const name = data.get('name') || '';
-            const phone = data.get('phone') || '';
-            const service = data.get('service') || 'Ainda não sei';
-            const date = data.get('date') || 'a combinar';
-            const message = data.get('message') || 'Sem observações';
-            const text = `Olá! Gostaria de solicitar ${mode} no Ana Lopes Espaço.\n\nNome: ${name}\nTelefone: ${phone}\nServiço: ${service}\nMelhor data: ${date}\nObservações: ${message}`;
-            if (APPS_SCRIPT_URL) {
-                fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(Object.fromEntries(data.entries()))
-                }).catch(() => {});
+            if (!APPS_SCRIPT_URL) {
+                alert('O formulário ainda não está ligado ao sistema. Configure a URL do Apps Script em assets/js/main.js.');
+                return;
             }
-            window.open(`https://wa.me/5511941438001?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+            const button = form.querySelector('button[type="submit"]');
+            const originalLabel = submitLabel.textContent;
+            submitLabel.textContent = 'Enviando...';
+            if (button) button.disabled = true;
+            fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(Object.fromEntries(data.entries()))
+            }).then(() => {
+                submitLabel.textContent = 'Solicitação enviada';
+                form.reset();
+                formType.value = 'agendamento';
+                tabs.forEach((item) => item.classList.toggle('active', item.dataset.formMode === 'agendamento'));
+                messageField.required = false;
+                messageField.placeholder = 'Conte um pouco sobre o seu momento, evento ou dúvida.';
+                const confirmation = document.createElement('p');
+                confirmation.className = 'form-success';
+                confirmation.textContent = 'Recebemos os seus dados. Em breve entraremos em contacto.';
+                form.appendChild(confirmation);
+                window.setTimeout(() => { confirmation.remove(); submitLabel.textContent = originalLabel; if (button) button.disabled = false; }, 5000);
+            }).catch(() => {
+                submitLabel.textContent = originalLabel;
+                if (button) button.disabled = false;
+                alert('Não foi possível enviar agora. Tente novamente.');
+            });
         });
     }
 });
