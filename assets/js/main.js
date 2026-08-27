@@ -1,4 +1,4 @@
-const APPS_SCRIPT_URL = '';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPMIMhd8ECVrWxBLsopNSGvXLBDd9uM6YhCJWqVBeVdrywiHzku1m2Xd30HMWIkLeq/exec';
 
 document.addEventListener('DOMContentLoaded', () => {
     const menuToggle = document.querySelector('[data-menu-toggle]');
