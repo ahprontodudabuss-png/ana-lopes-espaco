@@ -59,21 +59,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
-            const data = new FormData(form);
             if (!APPS_SCRIPT_URL) {
                 alert('O formulário ainda não está ligado ao sistema. Configure a URL do Apps Script em assets/js/main.js.');
                 return;
             }
             const button = form.querySelector('button[type="submit"]');
             const originalLabel = submitLabel.textContent;
+            const iframeName = `apps-script-submit-${Date.now()}`;
+            const iframe = document.createElement('iframe');
+            iframe.name = iframeName;
+            iframe.title = 'Envio do formulário';
+            iframe.hidden = true;
+            document.body.appendChild(iframe);
             submitLabel.textContent = 'Enviando...';
             if (button) button.disabled = true;
-            fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-                body: new URLSearchParams(data).toString()
-            }).then(() => {
+            const originalAction = form.getAttribute('action');
+            const originalMethod = form.getAttribute('method');
+            const originalTarget = form.getAttribute('target');
+            form.setAttribute('action', APPS_SCRIPT_URL);
+            form.setAttribute('method', 'POST');
+            form.setAttribute('target', iframeName);
+            HTMLFormElement.prototype.submit.call(form);
+            form.setAttribute('action', originalAction || '');
+            if (originalMethod) form.setAttribute('method', originalMethod); else form.removeAttribute('method');
+            if (originalTarget) form.setAttribute('target', originalTarget); else form.removeAttribute('target');
+            window.setTimeout(() => {
                 submitLabel.textContent = 'Solicitação enviada';
                 form.reset();
                 formType.value = 'agendamento';
@@ -84,12 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmation.className = 'form-success';
                 confirmation.textContent = 'Recebemos os seus dados. Em breve entraremos em contacto.';
                 form.appendChild(confirmation);
-                window.setTimeout(() => { confirmation.remove(); submitLabel.textContent = originalLabel; if (button) button.disabled = false; }, 5000);
-            }).catch(() => {
-                submitLabel.textContent = originalLabel;
-                if (button) button.disabled = false;
-                alert('Não foi possível enviar agora. Tente novamente.');
-            });
+                window.setTimeout(() => { confirmation.remove(); submitLabel.textContent = originalLabel; if (button) button.disabled = false; iframe.remove(); }, 5000);
+            }, 800);
         });
     }
 });
