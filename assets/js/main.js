@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(APPS_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(Object.fromEntries(data.entries()))
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                body: new URLSearchParams(data).toString()
             }).then(() => {
                 submitLabel.textContent = 'Solicitação enviada';
                 form.reset();
